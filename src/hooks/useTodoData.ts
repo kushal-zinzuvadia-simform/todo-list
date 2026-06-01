@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Todo } from '../types/TodoItem';
 
 export function useTodoData() {
-  const [todoData, setTodoData] = useState<Todo[]>([]);
+  const [todoData, setTodoData] = useState<Todo[]>(() => {
+    try {
+      const stored = localStorage.getItem('todoData');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('todoData', JSON.stringify(todoData));
+  }, [todoData]);
 
   function addItem(text: string) {
-    if (!text) return false;
+    if (!text.trim()) return false;
 
     setTodoData((prev) => [
       ...prev,
@@ -20,5 +31,17 @@ export function useTodoData() {
     return true;
   }
 
-  return { todoData, addItem };
+  function toggleTodo(id: string) {
+    setTodoData((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  }
+
+  function deleteTodo(id: string) {
+    setTodoData((prev) => prev.filter((todo) => todo.id !== id));
+  }
+
+  return { todoData, addItem, toggleTodo, deleteTodo };
 }
