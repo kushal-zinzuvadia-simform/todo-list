@@ -1,12 +1,20 @@
+import type { FilterType } from '../../types/FilterTodo';
 import type { Todo } from '../../types/TodoItem';
+import { getEmptyMessage } from '../../utils/getEmptyMessage';
 
 type TodoListProps = {
   todos: Todo[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  filter: FilterType;
 };
 
-export const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
+export const TodoList = ({
+  todos,
+  onToggle,
+  onDelete,
+  filter,
+}: TodoListProps) => {
   return (
     <div className="mx-auto w-full max-w-175 overflow-hidden border rounded-lg">
       <table className="w-full table-fixed">
@@ -23,7 +31,7 @@ export const TodoList = ({ todos, onToggle, onDelete }: TodoListProps) => {
           {todos.length === 0 ? (
             <tr>
               <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
-                No Tasks added yet.
+                {getEmptyMessage(filter)}
               </td>
             </tr>
           ) : (

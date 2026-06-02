@@ -21,6 +21,7 @@ function App() {
         todos={filteredTodos}
         onToggle={toggleTodo}
         onDelete={deleteTodo}
+        filter={filter}
       />
     </div>
   );
