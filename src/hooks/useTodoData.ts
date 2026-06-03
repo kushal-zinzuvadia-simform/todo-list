@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 
 import type { Todo } from '../types/TodoItem';
 
-import { getTodayDate } from '../utils/getTodayData';
-
 export function useTodoData() {
   const [todoData, setTodoData] = useState<Todo[]>(() => {
     try {
@@ -12,7 +10,7 @@ export function useTodoData() {
       if (!stored) return [];
 
       const todos: Todo[] = JSON.parse(stored);
-      const today = getTodayDate();
+      const today = new Date().toLocaleDateString('en-GB');
 
       return todos.filter((todo) => todo.createdAt === today);
     } catch {

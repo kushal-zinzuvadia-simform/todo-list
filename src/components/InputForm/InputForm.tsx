@@ -26,7 +26,7 @@ const InputForm = ({ onAdd }: InputFormProps) => {
       return;
     }
 
-    input.value = '';
+    e.currentTarget.reset();
     toast.success(`Added "${todo}"`, { duration: 3000 });
   };
 
@@ -36,6 +36,7 @@ const InputForm = ({ onAdd }: InputFormProps) => {
         <input
           type="text"
           placeholder="Enter Todo"
+          title="Enter Todo"
           maxLength={35}
           ref={todoRef}
           className="border rounded px-3 py-2 text-sm outline-none focus:ring-1"
