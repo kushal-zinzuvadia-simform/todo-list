@@ -1,5 +1,6 @@
 import type { FilterType } from '../../types/FilterTodo';
 import type { Todo } from '../../types/TodoItem';
+
 import { getEmptyMessage } from '../../utils/getEmptyMessage';
 
 type TodoListProps = {
