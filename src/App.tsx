@@ -1,17 +1,18 @@
 import { useState } from 'react';
 
 import { FilterTodo } from './components/FilterTodo/FilterTodo';
-import InputForm from './components/InputForm/InputForm';
+import { InputForm } from './components/InputForm/InputForm';
 import { TodoList } from './components/TodoList/TodoList';
-import { useFilter } from './hooks/useFilter';
+import { filterTodos } from './utils/filterTodos';
 import { useTodoData } from './hooks/useTodoData';
+
 import type { FilterType } from './types/FilterTodo';
 
 function App() {
   const { todoData, addItem, toggleTodo, deleteTodo } = useTodoData();
 
   const [filter, setFilter] = useState<FilterType>('All');
-  const filteredTodos = useFilter(todoData, filter);
+  const filteredTodos = filterTodos(todoData, filter);
 
   return (
     <div className="min-h-screen flex flex-col items-center gap-6 p-4">

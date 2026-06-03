@@ -6,7 +6,7 @@ type InputFormProps = {
   onAdd: (todo: string) => boolean;
 };
 
-const InputForm = ({ onAdd }: InputFormProps) => {
+export const InputForm = ({ onAdd }: InputFormProps) => {
   const todoRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -52,5 +52,3 @@ const InputForm = ({ onAdd }: InputFormProps) => {
     </div>
   );
 };
-
-export default InputForm;
