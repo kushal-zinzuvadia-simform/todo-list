@@ -1,19 +1,20 @@
-import { useState } from 'react';
-
 import type { FilterType } from '../../types/FilterTodo';
 
 type FilterTodoProps = {
+  filter: FilterType;
   onFilter: (filter: FilterType) => void;
 };
 
-export const FilterTodo = ({ onFilter }: FilterTodoProps) => {
-  const [selectedValue, setSelectedValue] = useState<FilterType>('All');
+const isFilterType = (value: string): value is FilterType =>
+  ['All', 'Completed', 'Incomplete'].includes(value);
 
+export const FilterTodo = ({ filter, onFilter }: FilterTodoProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value as FilterType;
+    const { value } = event.target;
 
-    setSelectedValue(value);
-    onFilter(value);
+    if (isFilterType(value)) {
+      onFilter(value);
+    }
   };
 
   return (
@@ -26,7 +27,7 @@ export const FilterTodo = ({ onFilter }: FilterTodoProps) => {
           value="All"
           id="allTodos"
           onChange={handleChange}
-          checked={selectedValue === 'All'}
+          checked={filter === 'All'}
         />
         All
       </label>
@@ -38,7 +39,7 @@ export const FilterTodo = ({ onFilter }: FilterTodoProps) => {
           value="Completed"
           id="completedTodos"
           onChange={handleChange}
-          checked={selectedValue === 'Completed'}
+          checked={filter === 'Completed'}
         />
         Completed
       </label>
@@ -50,7 +51,7 @@ export const FilterTodo = ({ onFilter }: FilterTodoProps) => {
           value="Incomplete"
           id="incompleteTodos"
           onChange={handleChange}
-          checked={selectedValue === 'Incomplete'}
+          checked={filter === 'Incomplete'}
         />
         Incomplete
       </label>

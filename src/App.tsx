@@ -17,7 +17,7 @@ function App() {
     <div className="min-h-screen flex flex-col items-center gap-6 p-4">
       <h1 className="text-2xl font-semibold">My To-Do List</h1>
       <InputForm onAdd={addItem} />
-      <FilterTodo onFilter={setFilter} />
+      <FilterTodo filter={filter} onFilter={setFilter} />
       <TodoList
         todos={filteredTodos}
         onToggle={toggleTodo}
