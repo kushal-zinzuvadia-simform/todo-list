@@ -4,7 +4,7 @@ import type { Todo } from '../../types/TodoItem';
 import { getEmptyMessage } from '../../utils/getEmptyMessage';
 
 type TodoListProps = {
-  todos: Todo[];
+  todos: Array<Todo>;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   filter: FilterType;

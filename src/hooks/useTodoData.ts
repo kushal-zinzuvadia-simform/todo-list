@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { Todo } from '../types/TodoItem';
 
 export function useTodoData() {
-  const [todoData, setTodoData] = useState<Todo[]>(() => {
+  const [todoData, setTodoData] = useState<Array<Todo>>(() => {
     try {
       const stored = localStorage.getItem('todoData');
 

@@ -7,7 +7,7 @@ type InputFormProps = {
 };
 
 export const InputForm = ({ onAdd }: InputFormProps) => {
-  const todoRef = useRef<HTMLInputElement>(null);
+  const todoRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
