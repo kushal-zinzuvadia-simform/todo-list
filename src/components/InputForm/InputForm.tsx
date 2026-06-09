@@ -1,9 +1,10 @@
 import { useRef } from 'react';
 
 import toast from 'react-hot-toast';
+import type { AddResult } from '../../types/AddResult';
 
 type InputFormProps = {
-  onAdd: (todo: string) => boolean;
+  onAdd: (todo: string) => AddResult;
 };
 
 export const InputForm = ({ onAdd }: InputFormProps) => {
@@ -17,12 +18,17 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
     if (!input) return;
 
     const todo = input.value.trim();
-    const added = onAdd(todo);
+    const result = onAdd(todo);
 
     input.focus();
 
-    if (!added) {
+    if (result === 'empty') {
       toast.error('Please enter a todo item to add');
+      return;
+    }
+
+    if (result === 'invalid') {
+      toast.error('Todo must contain at least one letter or number');
       return;
     }
 

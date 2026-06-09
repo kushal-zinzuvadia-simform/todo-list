@@ -23,7 +23,7 @@ export const TodoList = ({
           <tr className="border-b bg-gray-50">
             <th className="w-[10%] px-4 py-2 text-left"></th>
             <th className="w-[50%] px-4 py-2 text-left">Task</th>
-            <th className="w-[30%] px-4 py-2 text-left">Date Added</th>
+            <th className="w-[30%] px-4 py-2 text-left">Added on</th>
             <th className="w-[10%] px-4 py-2 text-left"></th>
           </tr>
         </thead>
@@ -55,7 +55,11 @@ export const TodoList = ({
                 >
                   {todo.text}
                 </td>
-                <td className="px-4 py-2">{todo.createdAt}</td>
+                <td className="px-4 py-2 text-sm">
+                  <span>
+                    {todo.createdAtDate} at {todo.createdAtTime}
+                  </span>
+                </td>
                 <td className="px-4 py-2">
                   <button
                     className="cursor-pointer rounded p-1 hover:bg-red-100"

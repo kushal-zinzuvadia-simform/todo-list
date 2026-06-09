@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Todo } from '../types/TodoItem';
+import type { AddResult } from '../types/AddResult';
 
 export function useTodoData() {
   const [todoData, setTodoData] = useState<Array<Todo>>(() => {
@@ -12,7 +13,7 @@ export function useTodoData() {
       const todos: Todo[] = JSON.parse(stored);
       const today = new Date().toLocaleDateString('en-GB');
 
-      return todos.filter((todo) => todo.createdAt === today);
+      return todos.filter((todo) => todo.createdAtDate === today);
     } catch {
       return [];
     }
@@ -22,8 +23,11 @@ export function useTodoData() {
     localStorage.setItem('todoData', JSON.stringify(todoData));
   }, [todoData]);
 
-  function addItem(text: string) {
-    if (!text.trim()) return false;
+  function addItem(text: string): AddResult {
+    if (!text.trim()) return 'empty';
+    if (!/[a-zA-Z0-9]/.test(text)) return 'invalid';
+
+    const now = new Date();
 
     setTodoData((prev) => [
       ...prev,
@@ -31,11 +35,15 @@ export function useTodoData() {
         id: crypto.randomUUID(),
         text,
         completed: false,
-        createdAt: new Date().toLocaleDateString('en-GB'),
+        createdAtDate: now.toLocaleDateString('en-GB'),
+        createdAtTime: now.toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
       },
     ]);
 
-    return true;
+    return 'added';
   }
 
   function toggleTodo(id: string) {
