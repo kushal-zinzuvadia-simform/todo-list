@@ -4,22 +4,37 @@ import type { Todo } from '../types/TodoItem';
 import type { AddResult } from '../types/AddResult';
 
 type UseTodoDataReturn = {
-  todoData: Todo[];
+  todoData: Array<Todo>;
   addItem: (text: string) => AddResult;
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
 };
 
-const fetchData = () => {
+const isTodo = (item: unknown): item is Todo => {
+  if (typeof item !== 'object' || item === null) return false;
+
+  const obj = item as Record<string, unknown>;
+
+  return (
+    typeof obj.id === 'string' &&
+    typeof obj.text === 'string' &&
+    typeof obj.completed === 'boolean' &&
+    typeof obj.createdAtDate === 'string' &&
+    typeof obj.createdAtTime === 'string'
+  );
+};
+
+const isTodoArray = (value: unknown): value is Array<Todo> =>
+  Array.isArray(value) && value.every(isTodo);
+
+const fetchData = (): Array<Todo> => {
   try {
     const stored = localStorage.getItem('todoData');
-
     if (!stored) return [];
 
-    const todos: Todo[] = JSON.parse(stored);
-    const today = new Date().toLocaleDateString('en-GB');
+    const parsed: unknown = JSON.parse(stored);
 
-    return todos.filter((todo) => todo.createdAtDate === today);
+    return isTodoArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
@@ -29,7 +44,10 @@ export function useTodoData(): UseTodoDataReturn {
   const [todoData, setTodoData] = useState<Array<Todo>>(fetchData);
 
   useEffect(() => {
-    localStorage.setItem('todoData', JSON.stringify(todoData));
+    const today = new Date().toLocaleDateString('en-GB');
+    const prunedTodos = todoData.filter((todo) => todo.createdAtDate === today);
+
+    localStorage.setItem('todoData', JSON.stringify(prunedTodos));
   }, [todoData]);
 
   function addItem(text: string): AddResult {

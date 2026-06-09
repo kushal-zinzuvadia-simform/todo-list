@@ -5,7 +5,8 @@ type FilterProps = {
   onFilter: (filter: FilterType) => void;
 };
 
-const isFilterType = (value: string): value is FilterType => value in filters;
+const isFilterType = (value: string): value is FilterType =>
+  filters.some((filter) => filter === value);
 
 export const Filter = ({ filter, onFilter }: FilterProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
