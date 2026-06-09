@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 import type { Todo } from '../types/TodoItem';
 import type { AddResult } from '../types/AddResult';
 
+type UseTodoDataReturn = {
+  todoData: Todo[];
+  addItem: (text: string) => AddResult;
+  toggleTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
+};
+
 const fetchData = () => {
   try {
     const stored = localStorage.getItem('todoData');
@@ -18,7 +25,7 @@ const fetchData = () => {
   }
 };
 
-export function useTodoData() {
+export function useTodoData(): UseTodoDataReturn {
   const [todoData, setTodoData] = useState<Array<Todo>>(fetchData);
 
   useEffect(() => {
@@ -48,7 +55,7 @@ export function useTodoData() {
     return 'added';
   }
 
-  function toggleTodo(id: string) {
+  function toggleTodo(id: string): void {
     setTodoData((prev) =>
       prev.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -56,7 +63,7 @@ export function useTodoData() {
     );
   }
 
-  function deleteTodo(id: string) {
+  function deleteTodo(id: string): void {
     setTodoData((prev) => prev.filter((todo) => todo.id !== id));
   }
 
