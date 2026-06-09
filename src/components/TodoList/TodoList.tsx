@@ -1,4 +1,4 @@
-import type { FilterType } from '../../types/FilterTodo';
+import type { FilterType } from '../../types/FilterType';
 import type { Todo } from '../../types/TodoItem';
 
 import { getEmptyMessage } from '../../utils/getEmptyMessage';

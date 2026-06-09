@@ -1,4 +1,4 @@
-import type { FilterType } from '../../types/FilterTodo';
+import type { FilterType } from '../../types/FilterType';
 
 type FilterTodoProps = {
   filter: FilterType;
@@ -8,7 +8,7 @@ type FilterTodoProps = {
 const isFilterType = (value: string): value is FilterType =>
   ['All', 'Completed', 'Incomplete'].includes(value);
 
-export const FilterTodo = ({ filter, onFilter }: FilterTodoProps) => {
+export const Filter = ({ filter, onFilter }: FilterTodoProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 

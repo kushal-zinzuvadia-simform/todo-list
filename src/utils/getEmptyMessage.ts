@@ -1,4 +1,4 @@
-import type { FilterType } from '../types/FilterTodo';
+import type { FilterType } from '../types/FilterType';
 
 export const getEmptyMessage = (filter: FilterType) => {
   switch (filter) {

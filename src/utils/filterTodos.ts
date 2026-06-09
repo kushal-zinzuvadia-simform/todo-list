@@ -1,7 +1,12 @@
 import type { Todo } from '../types/TodoItem';
-import type { FilterType } from '../types/FilterTodo';
+import type { FilterType } from '../types/FilterType';
 
-export function filterTodos(todos: Array<Todo>, filter: FilterType): Todo[] {
+type filterTodosProps = {
+  todos: Array<Todo>,
+  filter: FilterType
+}
+
+export function filterTodos({ todos, filter }: filterTodosProps): Array<Todo> {
   switch (filter) {
     case 'Completed':
       return todos.filter((todo) => todo.completed);
