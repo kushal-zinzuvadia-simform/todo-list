@@ -1,5 +1,5 @@
-import type { Todo } from '../types/TodoItem';
 import type { FilterType } from '../types/FilterType';
+import type { Todo } from '../types/TodoItem';
 
 type filterTodosProps = {
   todos: Array<Todo>;

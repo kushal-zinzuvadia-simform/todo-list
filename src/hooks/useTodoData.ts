@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import type { Todo } from '../types/TodoItem';
 import type { AddResult } from '../types/AddResult';
+import type { Todo } from '../types/TodoItem';
 
 type UseTodoDataReturn = {
   todoData: Array<Todo>;

@@ -8,7 +8,7 @@ import { useTodoData } from './hooks/useTodoData';
 
 import type { FilterType } from './types/FilterType';
 
-function App() {
+export function App() {
   const { todoData, addItem, toggleTodo, deleteTodo } = useTodoData();
 
   const [filter, setFilter] = useState<FilterType>('All');
@@ -28,5 +28,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

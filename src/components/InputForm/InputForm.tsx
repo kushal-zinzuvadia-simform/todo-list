@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import toast from 'react-hot-toast';
+
 import type { AddResult } from '../../types/AddResult';
 
 type InputFormProps = {
