@@ -2,9 +2,9 @@ import type { Todo } from '../types/TodoItem';
 import type { FilterType } from '../types/FilterType';
 
 type filterTodosProps = {
-  todos: Array<Todo>,
-  filter: FilterType
-}
+  todos: Array<Todo>;
+  filter: FilterType;
+};
 
 export function filterTodos({ todos, filter }: filterTodosProps): Array<Todo> {
   switch (filter) {

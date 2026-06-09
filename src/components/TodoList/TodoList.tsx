@@ -36,9 +36,9 @@ export const TodoList = ({
               </td>
             </tr>
           ) : (
-            todos.map((todo, index) => (
+            todos.map((todo) => (
               <tr
-                key={`${todo.text}-${index}`}
+                key={`${todo.id}`}
                 className="border-b last:border-b-0 even:bg-gray-100"
               >
                 <td className="px-4 py-2">

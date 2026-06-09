@@ -3,21 +3,23 @@ import { useEffect, useState } from 'react';
 import type { Todo } from '../types/TodoItem';
 import type { AddResult } from '../types/AddResult';
 
+const fetchData = () => {
+  try {
+    const stored = localStorage.getItem('todoData');
+
+    if (!stored) return [];
+
+    const todos: Todo[] = JSON.parse(stored);
+    const today = new Date().toLocaleDateString('en-GB');
+
+    return todos.filter((todo) => todo.createdAtDate === today);
+  } catch {
+    return [];
+  }
+};
+
 export function useTodoData() {
-  const [todoData, setTodoData] = useState<Array<Todo>>(() => {
-    try {
-      const stored = localStorage.getItem('todoData');
-
-      if (!stored) return [];
-
-      const todos: Todo[] = JSON.parse(stored);
-      const today = new Date().toLocaleDateString('en-GB');
-
-      return todos.filter((todo) => todo.createdAtDate === today);
-    } catch {
-      return [];
-    }
-  });
+  const [todoData, setTodoData] = useState<Array<Todo>>(fetchData);
 
   useEffect(() => {
     localStorage.setItem('todoData', JSON.stringify(todoData));
