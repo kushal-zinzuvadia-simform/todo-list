@@ -1,1 +1,5 @@
-export type AddResult = 'added' | 'empty' | 'invalid';
+export type AddResult =
+  | 'added'
+  | 'empty'
+  | 'too-short'
+  | 'too-many-special-characters';

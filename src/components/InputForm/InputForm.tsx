@@ -28,8 +28,13 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
       return;
     }
 
-    if (result === 'invalid') {
-      toast.error('Todo must contain at least one letter or number');
+    if (result === 'too-short') {
+      toast.error('Todo must contain at least 3 alphanumeric characters');
+      return;
+    }
+
+    if (result === 'too-many-special-characters') {
+      toast.error('Todo must not contain more than 5 special characters');
       return;
     }
 

@@ -51,8 +51,18 @@ export function useTodoData(): UseTodoDataReturn {
   }, [todoData]);
 
   function addItem(text: string): AddResult {
-    if (!text.trim()) return 'empty';
-    if (!/[a-zA-Z0-9]/.test(text)) return 'invalid';
+    const trimmedText = text.trim();
+
+    if (!trimmedText) return 'empty';
+
+    const alphanumericCount = (trimmedText.match(/[a-zA-Z0-9]/g) ?? []).length;
+
+    const specialCharacterCount = (trimmedText.match(/[^a-zA-Z0-9\s]/g) ?? [])
+      .length;
+
+    if (specialCharacterCount > 5) return 'too-many-special-characters';
+
+    if (alphanumericCount < 3) return 'too-short';
 
     const now = new Date();
 
@@ -60,7 +70,7 @@ export function useTodoData(): UseTodoDataReturn {
       ...prev,
       {
         id: crypto.randomUUID(),
-        text,
+        text: trimmedText,
         completed: false,
         createdAtDate: now.toLocaleDateString('en-GB'),
         createdAtTime: now.toLocaleTimeString('en-GB', {
