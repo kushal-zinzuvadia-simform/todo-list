@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Filter } from './components/Filter/Filter';
 import { InputForm } from './components/InputForm/InputForm';
-import { ThemeToggle } from './components/theme-toggle';
+import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import { TodoList } from './components/TodoList/TodoList';
 import { filterTodos } from './utils/filterTodos';
 import { useTodoData } from './hooks/useTodoData';

@@ -2,15 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '@fontsource-variable/geist';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-@import '@fontsource-variable/geist';
 
-@custom-variant dark (&:is(.dark *));
-
-body {
-  font-family: 'Inter', sans-serif;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --font-heading: var(--font-sans);
@@ -129,7 +122,7 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen;
   }
   html {
     @apply font-sans;
