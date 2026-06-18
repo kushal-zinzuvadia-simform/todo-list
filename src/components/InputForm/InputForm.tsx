@@ -51,10 +51,10 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
         <Input
           ref={todoRef}
           type="text"
-          placeholder="Enter Todo"
+          placeholder="Add a task"
           title="Enter Todo"
           maxLength={35}
-          className="max-w-sm"
+          className="max-w-sm border-slate-400"
         />
 
         <Button type="submit">Add Todo</Button>
