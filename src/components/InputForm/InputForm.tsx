@@ -2,6 +2,9 @@ import { useRef } from 'react';
 
 import toast from 'react-hot-toast';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
 import type { AddResult } from '../../types/AddResult';
 
 type InputFormProps = {
@@ -44,22 +47,17 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
 
   return (
     <div className="p-4">
-      <form className="flex items-center gap-3" onSubmit={handleSubmit}>
-        <input
+      <form onSubmit={handleSubmit} className="flex items-center gap-3">
+        <Input
+          ref={todoRef}
           type="text"
           placeholder="Enter Todo"
           title="Enter Todo"
           maxLength={35}
-          ref={todoRef}
-          className="border rounded px-3 py-2 text-sm outline-none focus:ring-1"
+          className="max-w-sm"
         />
 
-        <button
-          type="submit"
-          className="bg-black text-white px-4 py-2 rounded text-sm"
-        >
-          ADD TODO
-        </button>
+        <Button type="submit">Add Todo</Button>
       </form>
     </div>
   );
