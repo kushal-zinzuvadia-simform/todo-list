@@ -29,10 +29,10 @@ export const TodoList = ({
   filter,
 }: TodoListProps) => {
   return (
-    <div className="mx-auto w-full max-w-3xl rounded-lg border border-slate-500">
+    <div className="mx-auto w-full max-w-3xl rounded-lg border">
       <Table>
-        <TableHeader className="border-slate-400">
-          <TableRow className="border-slate-400">
+        <TableHeader>
+          <TableRow>
             <TableHead className="w-12" />
             <TableHead>Task</TableHead>
             <TableHead>Added At</TableHead>
@@ -58,7 +58,6 @@ export const TodoList = ({
                     checked={todo.completed}
                     onCheckedChange={() => onToggle(todo.id)}
                     aria-label={`Toggle ${todo.text}`}
-                    className="border-slate-400"
                   />
                 </TableCell>
 

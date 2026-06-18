@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Filter } from './components/Filter/Filter';
 import { InputForm } from './components/InputForm/InputForm';
+import { ThemeToggle } from './components/theme-toggle';
 import { TodoList } from './components/TodoList/TodoList';
 import { filterTodos } from './utils/filterTodos';
 import { useTodoData } from './hooks/useTodoData';
@@ -12,19 +13,40 @@ export function App() {
   const { todoData, addItem, toggleTodo, deleteTodo } = useTodoData();
 
   const [filter, setFilter] = useState<FilterType>('All');
-  const filteredTodos = filterTodos({ todos: todoData, filter });
+
+  const filteredTodos = filterTodos({
+    todos: todoData,
+    filter,
+  });
 
   return (
-    <div className="min-h-screen flex flex-col items-center gap-6 p-4">
-      <h1 className="text-2xl font-semibold">My To-Do List</h1>
-      <InputForm onAdd={addItem} />
-      <Filter filter={filter} onFilter={setFilter} />
-      <TodoList
-        todos={filteredTodos}
-        onToggle={toggleTodo}
-        onDelete={deleteTodo}
-        filter={filter}
-      />
-    </div>
+    <main className="bg-background min-h-screen">
+      <div className="container mx-auto max-w-3xl px-4 py-8">
+        <div className="mb-8 flex justify-end">
+          <ThemeToggle />
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-2 text-center">
+            <h1 className="text-4xl font-bold tracking-tight">My To-Do List</h1>
+          </div>
+
+          <div className="flex justify-center">
+            <InputForm onAdd={addItem} />
+          </div>
+
+          <div className="flex justify-center">
+            <Filter filter={filter} onFilter={setFilter} />
+          </div>
+
+          <TodoList
+            todos={filteredTodos}
+            onToggle={toggleTodo}
+            onDelete={deleteTodo}
+            filter={filter}
+          />
+        </div>
+      </div>
+    </main>
   );
 }
