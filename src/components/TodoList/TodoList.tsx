@@ -29,65 +29,67 @@ export const TodoList = ({
   filter,
 }: TodoListProps) => {
   return (
-    <div className="mx-auto w-full max-w-3xl rounded-lg border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-12" />
-            <TableHead>Task</TableHead>
-            <TableHead>Added At</TableHead>
-            <TableHead className="w-12" />
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {todos.length === 0 ? (
+    <div className="flex h-full flex-col rounded-lg border">
+      <div className="overflow-y-auto">
+        <Table>
+          <TableHeader className="bg-background sticky top-0 z-10">
             <TableRow>
-              <TableCell
-                colSpan={4}
-                className="text-muted-foreground py-8 text-center"
-              >
-                {getEmptyMessage(filter)}
-              </TableCell>
+              <TableHead className="w-12" />
+              <TableHead>Task</TableHead>
+              <TableHead>Added At</TableHead>
+              <TableHead className="w-12" />
             </TableRow>
-          ) : (
-            todos.map((todo) => (
-              <TableRow key={todo.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={todo.completed}
-                    onCheckedChange={() => onToggle(todo.id)}
-                    aria-label={`Toggle ${todo.text}`}
-                  />
-                </TableCell>
+          </TableHeader>
 
+          <TableBody>
+            {todos.length === 0 ? (
+              <TableRow>
                 <TableCell
-                  className={
-                    todo.completed ? 'text-muted-foreground line-through' : ''
-                  }
+                  colSpan={4}
+                  className="text-muted-foreground py-8 text-center"
                 >
-                  {todo.text}
-                </TableCell>
-
-                <TableCell className="text-muted-foreground text-sm">
-                  {todo.createdAtTime}
-                </TableCell>
-
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onDelete(todo.id)}
-                    aria-label={`Delete ${todo.text}`}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  {getEmptyMessage(filter)}
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : (
+              todos.map((todo) => (
+                <TableRow key={todo.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={todo.completed}
+                      onCheckedChange={() => onToggle(todo.id)}
+                      aria-label={`Toggle ${todo.text}`}
+                    />
+                  </TableCell>
+
+                  <TableCell
+                    className={
+                      todo.completed ? 'text-muted-foreground line-through' : ''
+                    }
+                  >
+                    {todo.text}
+                  </TableCell>
+
+                  <TableCell className="text-muted-foreground text-sm">
+                    {todo.createdAtTime}
+                  </TableCell>
+
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onDelete(todo.id)}
+                      aria-label={`Delete ${todo.text}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

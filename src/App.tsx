@@ -20,13 +20,13 @@ export function App() {
   });
 
   return (
-    <main className="bg-background min-h-screen">
-      <div className="container mx-auto max-w-3xl px-4 py-8">
+    <main className="bg-background h-screen overflow-hidden">
+      <div className="container mx-auto h-full flex flex-col max-w-3xl px-4 py-8">
         <div className="mb-8 flex justify-end">
           <ThemeToggle />
         </div>
 
-        <div className="space-y-6">
+        <div className="flex min-h-0 flex-1 flex-col space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-4xl font-bold tracking-tight">My To-Do List</h1>
           </div>
@@ -39,12 +39,14 @@ export function App() {
             <Filter filter={filter} onFilter={setFilter} />
           </div>
 
-          <TodoList
-            todos={filteredTodos}
-            onToggle={toggleTodo}
-            onDelete={deleteTodo}
-            filter={filter}
-          />
+          <div className="min-h-0 flex-1">
+            <TodoList
+              todos={filteredTodos}
+              onToggle={toggleTodo}
+              onDelete={deleteTodo}
+              filter={filter}
+            />
+          </div>
         </div>
       </div>
     </main>
