@@ -1,31 +1,13 @@
-import {
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-  type ReactNode,
-} from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 
 import type { AddResult } from '@/types/AddResult';
 import type { FilterType } from '@/types/FilterType';
-import type { Todo } from '@/types/TodoItem';
+import type { TodoAction, TodoProviderProps, TodoState } from '@/types/TodoProviderType';
 import { fetchData } from '@/utils/fetchTodos';
 import { filterTodos } from '@/utils/filterTodos';
+import { validateTodos } from '@/utils/validateTodos';
 
 import { TodoContext } from './todo-context';
-
-type TodoState = {
-  todoData: Array<Todo>;
-};
-
-type TodoAction =
-  | { type: 'ADD_TODO'; payload: Todo }
-  | { type: 'TOGGLE_TODO'; payload: string }
-  | { type: 'DELETE_TODO'; payload: string };
-
-type TodoProviderProps = {
-  children: ReactNode;
-};
 
 const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
   switch (action.type) {
@@ -67,37 +49,26 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const { todoData } = state;
 
   const addItem = (text: string): AddResult => {
-    const trimmedText = text.trim();
+    const { isValid, text: trimmedText, message } = validateTodos(text);
 
-    if (!trimmedText) return 'empty';
-
-    const alphanumericCount = (trimmedText.match(/[a-zA-Z0-9]/g) ?? []).length;
-
-    const specialCharacterCount = (trimmedText.match(/[^a-zA-Z0-9\s]/g) ?? [])
-      .length;
-
-    if (specialCharacterCount > 5) {
-      return 'too-many-special-characters';
-    }
-
-    if (alphanumericCount < 3) {
-      return 'too-short';
-    }
+    if (!isValid) return message;
 
     const now = new Date();
 
+    const todo = {
+      id: crypto.randomUUID(),
+      text: trimmedText,
+      completed: false,
+      createdAtDate: now.toLocaleDateString('en-GB'),
+      createdAtTime: now.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+
     dispatch({
       type: 'ADD_TODO',
-      payload: {
-        id: crypto.randomUUID(),
-        text: trimmedText,
-        completed: false,
-        createdAtDate: now.toLocaleDateString('en-GB'),
-        createdAtTime: now.toLocaleTimeString('en-GB', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-      },
+      payload: todo,
     });
 
     return 'added';
