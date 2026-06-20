@@ -1,17 +1,14 @@
-import { useRef } from 'react';
+import { useRef, useContext } from 'react';
 
 import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { TodoContext } from '@/context/todo-context';
 
-import type { AddResult } from '../../types/AddResult';
+export const InputForm = () => {
+  const { addItem } = useContext(TodoContext);
 
-type InputFormProps = {
-  onAdd: (todo: string) => AddResult;
-};
-
-export const InputForm = ({ onAdd }: InputFormProps) => {
   const todoRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -22,7 +19,7 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
     if (!input) return;
 
     const todo = input.value.trim();
-    const result = onAdd(todo);
+    const result = addItem(todo);
 
     input.focus();
 
