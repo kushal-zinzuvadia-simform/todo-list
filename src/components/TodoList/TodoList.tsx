@@ -1,8 +1,10 @@
-import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { Pencil, Trash2, Check, X } from 'lucide-react';
 
 import { useTodoContext } from '@/hooks/useTodoContext';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -11,11 +13,35 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { showErrorToast } from '@/utils/showErrorToast';
 
 import { getEmptyMessage } from '../../utils/getEmptyMessage';
 
 export const TodoList = () => {
-  const { filteredTodos, toggleTodo, deleteTodo, filter } = useTodoContext();
+  const { filteredTodos, toggleTodo, deleteTodo, editTodo, filter } =
+    useTodoContext();
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
+
+  const handleEditStart = (id: string, currentText: string) => {
+    setEditingId(id);
+    setEditText(currentText);
+  };
+
+  const handleEditCancel = () => {
+    setEditingId(null);
+    setEditText('');
+  };
+
+  const handleEditSave = (id: string) => {
+    const result = editTodo(id, editText);
+
+    showErrorToast(result);
+
+    setEditingId(null);
+    setEditText('');
+  };
 
   return (
     <div className="flex h-full flex-col rounded-lg border">
@@ -25,8 +51,8 @@ export const TodoList = () => {
             <TableRow>
               <TableHead className="w-12" />
               <TableHead>Task</TableHead>
-              <TableHead>Added At</TableHead>
-              <TableHead className="w-12" />
+              <TableHead className="w-36">Added At</TableHead>
+              <TableHead className="w-24" />
             </TableRow>
           </TableHeader>
 
@@ -41,40 +67,102 @@ export const TodoList = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              filteredTodos.map((todo) => (
-                <TableRow key={todo.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={todo.completed}
-                      onCheckedChange={() => toggleTodo(todo.id)}
-                      aria-label={`Toggle ${todo.text}`}
-                    />
-                  </TableCell>
+              filteredTodos.map((todo) => {
+                const isEditing = editingId === todo.id;
 
-                  <TableCell
-                    className={
-                      todo.completed ? 'text-muted-foreground line-through' : ''
-                    }
-                  >
-                    {todo.text}
-                  </TableCell>
+                return (
+                  <TableRow key={todo.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={todo.completed}
+                        onCheckedChange={() => toggleTodo(todo.id)}
+                        aria-label={`Toggle ${todo.text}`}
+                      />
+                    </TableCell>
 
-                  <TableCell className="text-muted-foreground text-sm">
-                    {todo.createdAtTime}
-                  </TableCell>
-
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteTodo(todo.id)}
-                      aria-label={`Delete ${todo.text}`}
+                    <TableCell
+                      className={
+                        todo.completed
+                          ? 'text-muted-foreground line-through'
+                          : ''
+                      }
                     >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
+                      {isEditing ? (
+                        <Input
+                          autoFocus
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleEditSave(todo.id);
+                            if (e.key === 'Escape') handleEditCancel();
+                          }}
+                          className="h-7 max-w-sm"
+                          aria-label="Edit todo"
+                          title="Edit todo"
+                          placeholder="Edit todo"
+                        />
+                      ) : (
+                        todo.text
+                      )}
+                    </TableCell>
+
+                    <TableCell className="text-muted-foreground text-sm">
+                      {todo.createdAtTime}
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        {isEditing ? (
+                          <>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleEditSave(todo.id)}
+                              aria-label="Save todo"
+                              title="Save"
+                            >
+                              <Check className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={handleEditCancel}
+                              aria-label="Cancel edit"
+                              title="Cancel"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() =>
+                                handleEditStart(todo.id, todo.text)
+                              }
+                              disabled={todo.completed}
+                              aria-label={`Edit ${todo.text}`}
+                              title="Edit"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              title="Delete"
+                              onClick={() => deleteTodo(todo.id)}
+                              aria-label={`Delete ${todo.text}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>

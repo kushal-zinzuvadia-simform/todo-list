@@ -7,6 +7,7 @@ import type { FilterType } from '@/types/FilterType';
 export type TodoContextValue = {
   todoData: Array<Todo>;
   addItem: (text: string) => AddResult;
+  editTodo: (id: string, text: string) => AddResult;
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
   setFilter: (filter: FilterType) => void;

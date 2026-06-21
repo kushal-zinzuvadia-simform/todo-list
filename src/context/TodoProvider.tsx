@@ -31,6 +31,14 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
       return {
         todoData: state.todoData.filter((todo) => todo.id !== action.payload),
       };
+    case 'EDIT_TODO':
+      return {
+        todoData: state.todoData.map((todo) =>
+          todo.id === action.payload.id
+            ? { ...todo, text: action.payload.text }
+            : todo
+        ),
+      };
     default:
       return state;
   }
@@ -80,6 +88,18 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     return 'added';
   };
 
+  const editTodo = (id: string, text: string): AddResult => {
+    const result = validateTodos(text);
+
+    if (!result.isValid) {
+      return result.message;
+    }
+
+    dispatch({ type: 'EDIT_TODO', payload: { id, text: result.text } });
+
+    return 'added';
+  };
+
   const toggleTodo = (id: string) => {
     dispatch({ type: 'TOGGLE_TODO', payload: id });
   };
@@ -99,6 +119,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     () => ({
       todoData,
       addItem,
+      editTodo,
       toggleTodo,
       deleteTodo,
       setFilter,
