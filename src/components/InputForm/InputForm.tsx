@@ -1,13 +1,13 @@
-import { useRef, useContext } from 'react';
+import { useRef } from 'react';
 
 import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { TodoContext } from '@/context/todo-context';
+import { useTodoContext } from '@/hooks/useTodoContext';
 
 export const InputForm = () => {
-  const { addItem } = useContext(TodoContext);
+  const { addItem } = useTodoContext();
 
   const todoRef = useRef<HTMLInputElement | null>(null);
 

@@ -1,8 +1,6 @@
-import { useContext } from 'react';
-
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { TodoContext } from '@/context/todo-context';
+import { useTodoContext } from '@/hooks/useTodoContext';
 
 import { filters, type FilterType } from '../../types/FilterType';
 
@@ -10,7 +8,7 @@ const isFilterType = (value: string): value is FilterType =>
   filters.some((filter) => filter === value);
 
 export const Filter = () => {
-  const { setFilter, filter } = useContext(TodoContext);
+  const { setFilter, filter } = useTodoContext();
 
   const handleChange = (value: string) => {
     if (isFilterType(value)) {

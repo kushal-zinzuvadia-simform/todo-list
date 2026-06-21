@@ -2,7 +2,11 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 
 import type { AddResult } from '@/types/AddResult';
 import type { FilterType } from '@/types/FilterType';
-import type { TodoAction, TodoProviderProps, TodoState } from '@/types/TodoProviderType';
+import type {
+  TodoAction,
+  TodoProviderProps,
+  TodoState,
+} from '@/types/TodoProviderType';
 import { fetchData } from '@/utils/fetchTodos';
 import { filterTodos } from '@/utils/filterTodos';
 import { validateTodos } from '@/utils/validateTodos';
@@ -49,15 +53,17 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const { todoData } = state;
 
   const addItem = (text: string): AddResult => {
-    const { isValid, text: trimmedText, message } = validateTodos(text);
+    const result = validateTodos(text);
 
-    if (!isValid) return message;
+    if (!result.isValid) {
+      return result.message;
+    }
 
     const now = new Date();
 
     const todo = {
       id: crypto.randomUUID(),
-      text: trimmedText,
+      text: result.text,
       completed: false,
       createdAtDate: now.toLocaleDateString('en-GB'),
       createdAtTime: now.toLocaleTimeString('en-GB', {

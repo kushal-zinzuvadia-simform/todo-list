@@ -1,8 +1,6 @@
-import { useContext } from 'react';
 import { Trash2 } from 'lucide-react';
 
-import { TodoContext } from '@/context/todo-context';
-
+import { useTodoContext } from '@/hooks/useTodoContext';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -17,8 +15,7 @@ import {
 import { getEmptyMessage } from '../../utils/getEmptyMessage';
 
 export const TodoList = () => {
-  const { filteredTodos, toggleTodo, deleteTodo, filter } =
-    useContext(TodoContext);
+  const { filteredTodos, toggleTodo, deleteTodo, filter } = useTodoContext();
 
   return (
     <div className="flex h-full flex-col rounded-lg border">
