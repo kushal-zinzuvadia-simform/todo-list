@@ -14,33 +14,31 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { showErrorToast } from '@/utils/showErrorToast';
-
-import { getEmptyMessage } from '../../utils/getEmptyMessage';
+import { getEmptyMessage } from '@/utils/getEmptyMessage';
 
 export const TodoList = () => {
   const { filteredTodos, toggleTodo, deleteTodo, editTodo, filter } =
     useTodoContext();
 
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editText, setEditText] = useState('');
+  const [editState, setEditState] = useState<{
+    id: string;
+    text: string;
+  } | null>(null);
 
   const handleEditStart = (id: string, currentText: string) => {
-    setEditingId(id);
-    setEditText(currentText);
+    setEditState({ id, text: currentText });
   };
 
   const handleEditCancel = () => {
-    setEditingId(null);
-    setEditText('');
+    setEditState(null);
   };
 
   const handleEditSave = (id: string) => {
-    const result = editTodo(id, editText);
+    const result = editTodo(id, editState!.text);
 
     showErrorToast(result);
 
-    setEditingId(null);
-    setEditText('');
+    setEditState(null);
   };
 
   return (
@@ -68,7 +66,7 @@ export const TodoList = () => {
               </TableRow>
             ) : (
               filteredTodos.map((todo) => {
-                const isEditing = editingId === todo.id;
+                const isEditing = editState?.id === todo.id;
 
                 return (
                   <TableRow key={todo.id}>
@@ -90,8 +88,13 @@ export const TodoList = () => {
                       {isEditing ? (
                         <Input
                           autoFocus
-                          value={editText}
-                          onChange={(e) => setEditText(e.target.value)}
+                          value={editState?.text ?? ''}
+                          onChange={(e) =>
+                            setEditState({
+                              id: editState!.id,
+                              text: e.target.value,
+                            })
+                          }
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') handleEditSave(todo.id);
                             if (e.key === 'Escape') handleEditCancel();
