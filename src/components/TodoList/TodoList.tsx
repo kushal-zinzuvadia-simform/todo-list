@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { useTodoContext } from '@/hooks/useTodoContext';
 import { Button } from '@/components/ui/button';
@@ -38,7 +39,9 @@ export const TodoList = () => {
 
     const result = editTodo(id, editState.text);
 
-    if (result !== 'success') {
+    if (result === 'success') {
+      toast.success('Todo updated successfully');
+    } else {
       showErrorToast(result);
     }
 
