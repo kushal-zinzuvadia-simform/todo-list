@@ -7,7 +7,7 @@ import type {
   TodoProviderProps,
   TodoState,
 } from '@/types/TodoProviderType';
-import { fetchData } from '@/utils/fetchTodos';
+import { loadTodosFromStorage } from '@/utils/fetchTodos';
 import { filterTodos } from '@/utils/filterTodos';
 import { validateTodos } from '@/utils/validateTodos';
 
@@ -50,7 +50,7 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
 
 export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [state, dispatch] = useReducer(todoReducer, {
-    todoData: fetchData(),
+    todoData: loadTodosFromStorage(),
   });
 
   const [filter, setFilter] = useState<FilterType>('All');

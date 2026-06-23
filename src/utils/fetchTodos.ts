@@ -17,7 +17,7 @@ const isTodo = (item: unknown): item is Todo => {
 const isTodoArray = (value: unknown): value is Array<Todo> =>
   Array.isArray(value) && value.every(isTodo);
 
-export const fetchData = (): Array<Todo> => {
+export const loadTodosFromStorage = (): Array<Todo> => {
   try {
     const stored = localStorage.getItem('todoData');
     if (!stored) return [];
