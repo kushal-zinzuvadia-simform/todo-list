@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
 import type { AddResult } from '@/types/AddResult';
 import type { FilterType } from '@/types/FilterType';
@@ -19,6 +19,7 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
       return {
         todoData: [...state.todoData, action.payload],
       };
+
     case 'TOGGLE_TODO':
       return {
         todoData: state.todoData.map((todo) =>
@@ -27,10 +28,12 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
             : todo
         ),
       };
+
     case 'DELETE_TODO':
       return {
         todoData: state.todoData.filter((todo) => todo.id !== action.payload),
       };
+
     case 'EDIT_TODO':
       return {
         todoData: state.todoData.map((todo) =>
@@ -39,28 +42,30 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
             : todo
         ),
       };
+
     default:
       return state;
   }
 };
 
 export const TodoProvider = ({ children }: TodoProviderProps) => {
-  const [state, dispatch] = useReducer(todoReducer, { todoData: fetchData() });
+  const [state, dispatch] = useReducer(todoReducer, {
+    todoData: fetchData(),
+  });
+
   const [filter, setFilter] = useState<FilterType>('All');
+
+  const { todoData } = state;
 
   useEffect(() => {
     const today = new Date().toLocaleDateString('en-GB');
 
-    const prunedTodos = state.todoData.filter(
-      (todo) => todo.createdAtDate === today
-    );
+    const prunedTodos = todoData.filter((todo) => todo.createdAtDate === today);
 
     localStorage.setItem('todoData', JSON.stringify(prunedTodos));
-  }, [state.todoData]);
+  }, [todoData]);
 
-  const { todoData } = state;
-
-  const addItem = (text: string): AddResult => {
+  const addItem = useCallback((text: string): AddResult => {
     const result = validateTodos(text);
 
     if (!result.isValid) {
@@ -69,51 +74,63 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
 
     const now = new Date();
 
-    const todo = {
-      id: crypto.randomUUID(),
-      text: result.text,
-      completed: false,
-      createdAtDate: now.toLocaleDateString('en-GB'),
-      createdAtTime: now.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-    };
-
     dispatch({
       type: 'ADD_TODO',
-      payload: todo,
+      payload: {
+        id: crypto.randomUUID(),
+        text: result.text,
+        completed: false,
+        createdAtDate: now.toLocaleDateString('en-GB'),
+        createdAtTime: now.toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      },
     });
 
     return 'added';
-  };
+  }, []);
 
-  const editTodo = (id: string, text: string): AddResult => {
+  const editTodo = useCallback((id: string, text: string): AddResult => {
     const result = validateTodos(text);
 
     if (!result.isValid) {
       return result.message;
     }
 
-    dispatch({ type: 'EDIT_TODO', payload: { id, text: result.text } });
+    dispatch({
+      type: 'EDIT_TODO',
+      payload: {
+        id,
+        text: result.text,
+      },
+    });
 
     return 'added';
-  };
+  }, []);
 
-  const toggleTodo = (id: string) => {
-    dispatch({ type: 'TOGGLE_TODO', payload: id });
-  };
-
-  const deleteTodo = (id: string) => {
-    dispatch({ type: 'DELETE_TODO', payload: id });
-  };
-
-  const filteredTodos = useMemo(() => {
-    return filterTodos({
-      todos: todoData,
-      filter,
+  const toggleTodo = useCallback((id: string) => {
+    dispatch({
+      type: 'TOGGLE_TODO',
+      payload: id,
     });
-  }, [todoData, filter]);
+  }, []);
+
+  const deleteTodo = useCallback((id: string) => {
+    dispatch({
+      type: 'DELETE_TODO',
+      payload: id,
+    });
+  }, []);
+
+  const filteredTodos = useMemo(
+    () =>
+      filterTodos({
+        todos: todoData,
+        filter,
+      }),
+    [todoData, filter]
+  );
 
   const value = useMemo(
     () => ({
@@ -126,7 +143,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       filter,
       filteredTodos,
     }),
-    [todoData, filter, filteredTodos]
+    [todoData, filter, filteredTodos, addItem, editTodo, toggleTodo, deleteTodo]
   );
 
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
