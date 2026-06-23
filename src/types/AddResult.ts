@@ -1,5 +1,5 @@
 export type AddResult =
-  | 'added'
+  | 'success'
   | 'empty'
   | 'too-short'
   | 'too-many-special-characters';

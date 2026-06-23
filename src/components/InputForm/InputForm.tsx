@@ -4,14 +4,12 @@ import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useTodoContext } from '@/hooks/useTodoContext';
+import { showErrorToast } from '@/utils/showErrorToast';
 
-import type { AddResult } from '../../types/AddResult';
+export const InputForm = () => {
+  const { addItem } = useTodoContext();
 
-type InputFormProps = {
-  onAdd: (todo: string) => AddResult;
-};
-
-export const InputForm = ({ onAdd }: InputFormProps) => {
   const todoRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -22,24 +20,10 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
     if (!input) return;
 
     const todo = input.value.trim();
-    const result = onAdd(todo);
+    const result = addItem(todo);
 
     input.focus();
-
-    if (result === 'empty') {
-      toast.error('Please enter a todo item to add');
-      return;
-    }
-
-    if (result === 'too-short') {
-      toast.error('Todo must contain at least 3 alphanumeric characters');
-      return;
-    }
-
-    if (result === 'too-many-special-characters') {
-      toast.error('Todo must not contain more than 5 special characters');
-      return;
-    }
+    showErrorToast(result);
 
     e.currentTarget.reset();
     toast.success(`Added "${todo}"`, { duration: 3000 });
@@ -57,7 +41,9 @@ export const InputForm = ({ onAdd }: InputFormProps) => {
           className="max-w-sm"
         />
 
-        <Button type="submit">Add Todo</Button>
+        <Button type="submit" title="Add Todo">
+          Add Todo
+        </Button>
       </form>
     </div>
   );
