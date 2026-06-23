@@ -88,7 +88,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       },
     });
 
-    return 'added';
+    return 'success';
   }, []);
 
   const editTodo = useCallback((id: string, text: string): AddResult => {
@@ -106,7 +106,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
       },
     });
 
-    return 'added';
+    return 'success';
   }, []);
 
   const toggleTodo = useCallback((id: string) => {
