@@ -34,9 +34,13 @@ export const TodoList = () => {
   };
 
   const handleEditSave = (id: string) => {
-    const result = editTodo(id, editState!.text);
+    if (!editState) return;
 
-    showErrorToast(result);
+    const result = editTodo(id, editState.text);
+
+    if (result !== 'success') {
+      showErrorToast(result);
+    }
 
     setEditState(null);
   };
@@ -89,12 +93,14 @@ export const TodoList = () => {
                         <Input
                           autoFocus
                           value={editState?.text ?? ''}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            if (!editState) return;
+
                             setEditState({
-                              id: editState!.id,
+                              id: editState.id,
                               text: e.target.value,
-                            })
-                          }
+                            });
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') handleEditSave(todo.id);
                             if (e.key === 'Escape') handleEditCancel();
