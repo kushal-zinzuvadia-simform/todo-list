@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import type { Todo } from './TodoItem';
+import type { FilterType } from './FilterType';
 
 export type TodoState = {
   todoData: Array<Todo>;
+  filterCategory: FilterType;
 };
 
 export type TodoAction =

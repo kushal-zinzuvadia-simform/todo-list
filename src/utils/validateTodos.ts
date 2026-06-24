@@ -1,8 +1,10 @@
 import type { AddResult } from '@/types/AddResult';
 
-type ValidationResult =
-  | { isValid: false; message: AddResult }
-  | { isValid: true; text: string };
+type ValidationResult = {
+  isValid: boolean;
+  message?: AddResult;
+  text?: string;
+};
 
 export const validateTodos = (text: string): ValidationResult => {
   const trimmedText = text.trim();

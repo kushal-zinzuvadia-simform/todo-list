@@ -1,8 +1,7 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
-import toast from 'react-hot-toast';
 
-import { useTodoContext } from '@/hooks/useTodoContext';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -14,12 +13,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { showErrorToast } from '@/utils/showErrorToast';
+import { deleteTodo, editTodo, toggleTodo } from '@/redux/slices/todoSlice';
+import type { AppDispatch, RootState } from '@/redux/store';
+import { filterTodos } from '@/utils/filterTodos';
 import { getEmptyMessage } from '@/utils/getEmptyMessage';
 
 export const TodoList = () => {
-  const { filteredTodos, toggleTodo, deleteTodo, editTodo, filter } =
-    useTodoContext();
+  const dispatch: AppDispatch = useDispatch();
+  const filter = useSelector((state: RootState) => state.todos.filterCategory);
+  const todoData = useSelector((state: RootState) => state.todos.todoData);
+
+  const filteredTodos = filterTodos({ todos: todoData, filter: filter });
 
   const [editState, setEditState] = useState<{
     id: string;
@@ -34,16 +38,10 @@ export const TodoList = () => {
     setEditState(null);
   };
 
-  const handleEditSave = (id: string) => {
+  const handleEditSave = () => {
     if (!editState) return;
 
-    const result = editTodo(id, editState.text);
-
-    if (result === 'success') {
-      toast.success('Todo updated successfully');
-    } else {
-      showErrorToast(result);
-    }
+    dispatch(editTodo(editState));
 
     setEditState(null);
   };
@@ -80,7 +78,7 @@ export const TodoList = () => {
                     <TableCell>
                       <Checkbox
                         checked={todo.completed}
-                        onCheckedChange={() => toggleTodo(todo.id)}
+                        onCheckedChange={() => dispatch(toggleTodo(todo.id))}
                         aria-label={`Toggle ${todo.text}`}
                       />
                     </TableCell>
@@ -105,7 +103,7 @@ export const TodoList = () => {
                             });
                           }}
                           onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleEditSave(todo.id);
+                            if (e.key === 'Enter') handleEditSave();
                             if (e.key === 'Escape') handleEditCancel();
                           }}
                           className="h-7 max-w-sm"
@@ -129,7 +127,7 @@ export const TodoList = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => handleEditSave(todo.id)}
+                              onClick={() => handleEditSave()}
                               aria-label="Save todo"
                               title="Save"
                             >
@@ -163,7 +161,7 @@ export const TodoList = () => {
                               variant="ghost"
                               size="icon"
                               title="Delete"
-                              onClick={() => deleteTodo(todo.id)}
+                              onClick={() => dispatch(deleteTodo(todo.id))}
                               aria-label={`Delete ${todo.text}`}
                             >
                               <Trash2 className="h-4 w-4" />
