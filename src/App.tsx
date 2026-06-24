@@ -1,25 +1,9 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
 import { Filter } from './components/Filter/Filter';
 import { InputForm } from './components/InputForm/InputForm';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import { TodoList } from './components/TodoList/TodoList';
-import type { RootState } from './redux/store';
 
 export function App() {
-  const todoData = useSelector((state: RootState) => state.todos.todoData);
-
-  useEffect(() => {
-    const today = new Date().toLocaleDateString('en-GB');
-
-    const prunedTodos = todoData?.filter(
-      (todo) => todo.createdAtDate === today
-    );
-
-    localStorage.setItem('todoData', JSON.stringify(prunedTodos));
-  }, [todoData]);
-
   return (
     <main className="bg-background h-screen overflow-hidden">
       <div className="container mx-auto h-full flex flex-col max-w-3xl px-4 py-8">
