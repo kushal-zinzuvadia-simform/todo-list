@@ -5,10 +5,10 @@ import { Filter } from './components/Filter/Filter';
 import { InputForm } from './components/InputForm/InputForm';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import { TodoList } from './components/TodoList/TodoList';
-import type { TodoSliceState } from './types/TodoSliceState';
+import type { RootState } from './redux/store';
 
 export function App() {
-  const todoData = useSelector((state: TodoSliceState) => state.todoData);
+  const todoData = useSelector((state: RootState) => state.todos.todoData);
 
   useEffect(() => {
     const today = new Date().toLocaleDateString('en-GB');

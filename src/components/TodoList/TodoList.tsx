@@ -14,18 +14,17 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { deleteTodo, editTodo, toggleTodo } from '@/redux/slices/todoSlice';
-import type { AppDispatch } from '@/redux/store';
+import type { AppDispatch, RootState } from '@/redux/store';
 import { filterTodos } from '@/utils/filterTodos';
 import { getEmptyMessage } from '@/utils/getEmptyMessage';
 import type { FilterType } from '@/types/FilterType';
-import type { TodoSliceState } from '@/types/TodoSliceState';
 
 export const TodoList = () => {
   const dispatch: AppDispatch = useDispatch();
   const filter: FilterType = useSelector(
-    (state: TodoSliceState) => state.filterCategory
+    (state: RootState) => state.todos.filterCategory
   );
-  const todoData = useSelector((state: TodoSliceState) => state.todoData);
+  const todoData = useSelector((state: RootState) => state.todos.todoData);
 
   const filteredTodos = filterTodos({ todos: todoData, filter: filter });
 

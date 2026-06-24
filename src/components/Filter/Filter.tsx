@@ -2,9 +2,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import type { AppDispatch } from '@/redux/store';
+import type { AppDispatch, RootState } from '@/redux/store';
 import { setFilter } from '@/redux/slices/todoSlice';
-import type { TodoSliceState } from '@/types/TodoSliceState';
 
 import { filters, type FilterType } from '../../types/FilterType';
 
@@ -12,7 +11,7 @@ const isFilterType = (value: string): value is FilterType =>
   filters.some((filter) => filter === value);
 
 export const Filter = () => {
-  const filter = useSelector((state: TodoSliceState) => state.filterCategory);
+  const filter = useSelector((state: RootState) => state.todos.filterCategory);
   const dispatch: AppDispatch = useDispatch();
 
   const handleChange = (value: string) => {
