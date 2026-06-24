@@ -1,13 +1,13 @@
 import toast from 'react-hot-toast';
 
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { TodoState } from '@/types/TodoProviderType';
 import { loadTodosFromStorage } from '@/utils/fetchTodos';
 import type { FilterType } from '@/types/FilterType';
 import { validateTodos } from '@/utils/validateTodos';
 import { showErrorToast } from '@/utils/showErrorToast';
+import type { TodoSliceState } from '@/types/TodoSliceState';
 
-const initialState: TodoState = {
+const initialState: TodoSliceState = {
   todoData: loadTodosFromStorage(),
   filterCategory: 'All',
 };
@@ -19,7 +19,7 @@ const todoSlice = createSlice({
     addTodo(state, action: PayloadAction<string>) {
       const result = validateTodos(action.payload);
 
-      if (!result.isValid) {
+      if (result.isValid === false) {
         showErrorToast(result.message);
         return;
       }
@@ -63,7 +63,7 @@ const todoSlice = createSlice({
     ) {
       const result = validateTodos(action.payload.text);
 
-      if (!result.isValid) {
+      if (result.isValid === false) {
         showErrorToast(result.message);
         return;
       }
@@ -71,7 +71,7 @@ const todoSlice = createSlice({
       const todo = state.todoData.find((todo) => todo.id === action.payload.id);
 
       if (todo) {
-        todo.text = action.payload.text;
+        todo.text = result.text;
         toast.success('Todo updated successfully');
       }
     },

@@ -5,15 +5,17 @@ import { Filter } from './components/Filter/Filter';
 import { InputForm } from './components/InputForm/InputForm';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import { TodoList } from './components/TodoList/TodoList';
-import type { TodoState } from './types/TodoProviderType';
+import type { TodoSliceState } from './types/TodoSliceState';
 
 export function App() {
-  const todoData = useSelector((state: TodoState) => state.todoData);
+  const todoData = useSelector((state: TodoSliceState) => state.todoData);
 
   useEffect(() => {
     const today = new Date().toLocaleDateString('en-GB');
 
-    const prunedTodos = todoData?.filter((todo) => todo.createdAtDate === today);
+    const prunedTodos = todoData?.filter(
+      (todo) => todo.createdAtDate === today
+    );
 
     localStorage.setItem('todoData', JSON.stringify(prunedTodos));
   }, [todoData]);

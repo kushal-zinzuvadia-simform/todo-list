@@ -21,7 +21,7 @@ export const InputForm = () => {
     dispatch(addTodo(todo));
 
     input.focus();
-    // e.currentTarget.reset();
+    e.currentTarget.reset();
   };
 
   return (
