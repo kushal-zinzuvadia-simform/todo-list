@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { addTodo } from '@/redux/slices/todoSlice';
 import type { AppDispatch } from '@/redux/store';
-import { validateTodos } from '@/utils/validateTodos';
+import { createTodo } from '@/utils/createTodo';
 import { showErrorToast } from '@/utils/showErrorToast';
+import { validateTodos } from '@/utils/validateTodos';
 
 export const InputForm = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,20 +28,7 @@ export const InputForm = () => {
       return;
     }
 
-    const now = new Date();
-
-    dispatch(
-      addTodo({
-        id: crypto.randomUUID(),
-        text: result.text,
-        completed: false,
-        createdAtDate: now.toLocaleDateString('en-GB'),
-        createdAtTime: now.toLocaleTimeString('en-GB', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-      })
-    );
+    dispatch(addTodo(createTodo(result.text)));
 
     toast.success(`Added "${result.text}"`);
 
