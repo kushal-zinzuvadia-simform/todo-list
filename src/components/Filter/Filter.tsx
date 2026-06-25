@@ -12,7 +12,7 @@ const isFilterType = (value: string): value is FilterType =>
 
 export const Filter = () => {
   const filter = useSelector((state: RootState) => state.todos.filterCategory);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (value: string) => {
     if (isFilterType(value)) {

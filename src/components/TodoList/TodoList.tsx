@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -17,10 +18,13 @@ import { deleteTodo, editTodo, toggleTodo } from '@/redux/slices/todoSlice';
 import type { AppDispatch, RootState } from '@/redux/store';
 import { filterTodos } from '@/utils/filterTodos';
 import { getEmptyMessage } from '@/utils/getEmptyMessage';
+import { showErrorToast } from '@/utils/showErrorToast';
+import { validateTodos } from '@/utils/validateTodos';
 import type { FilterType } from '@/types/FilterType';
 
 export const TodoList = () => {
   const dispatch = useDispatch<AppDispatch>();
+
   const filter: FilterType = useSelector(
     (state: RootState) => state.todos.filterCategory
   );
@@ -37,15 +41,24 @@ export const TodoList = () => {
     setEditState({ id, text: currentText });
   };
 
-  const handleEditCancel = () => {
-    setEditState(null);
-  };
-
   const handleEditSave = () => {
     if (!editState) return;
 
-    dispatch(editTodo(editState));
+    const result = validateTodos(editState.text);
 
+    if (result.isValid === false) {
+      showErrorToast(result.message);
+      return;
+    }
+
+    dispatch(
+      editTodo({
+        id: editState.id,
+        text: result.text,
+      })
+    );
+
+    toast.success('Todo updated successfully');
     setEditState(null);
   };
 

@@ -1,11 +1,8 @@
-import toast from 'react-hot-toast';
-
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { loadTodosFromStorage } from '@/utils/fetchTodos';
 import type { FilterType } from '@/types/FilterType';
-import { validateTodos } from '@/utils/validateTodos';
-import { showErrorToast } from '@/utils/showErrorToast';
 import type { TodoSliceState } from '@/types/TodoSliceState';
+import type { Todo } from '@/types/TodoItem';
 
 const initialState: TodoSliceState = {
   todoData: loadTodosFromStorage(),
@@ -16,28 +13,8 @@ const todoSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    addTodo(state, action: PayloadAction<string>) {
-      const result = validateTodos(action.payload);
-
-      if (result.isValid === false) {
-        showErrorToast(result.message);
-        return;
-      }
-
-      const now = new Date();
-
-      state.todoData.push({
-        id: crypto.randomUUID(),
-        text: result.text,
-        completed: false,
-        createdAtDate: now.toLocaleDateString('en-GB'),
-        createdAtTime: now.toLocaleTimeString('en-GB', {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-      });
-
-      toast.success(`Added "${result.text}"`, { duration: 3000 });
+    addTodo(state, action: PayloadAction<Todo>) {
+      state.todoData.push(action.payload);
     },
 
     toggleTodo(state, action: PayloadAction<string>) {
@@ -61,18 +38,10 @@ const todoSlice = createSlice({
         text: string;
       }>
     ) {
-      const result = validateTodos(action.payload.text);
-
-      if (result.isValid === false) {
-        showErrorToast(result.message);
-        return;
-      }
-
       const todo = state.todoData.find((todo) => todo.id === action.payload.id);
 
       if (todo) {
-        todo.text = result.text;
-        toast.success('Todo updated successfully');
+        todo.text = action.payload.text;
       }
     },
 

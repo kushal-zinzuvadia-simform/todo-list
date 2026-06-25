@@ -4,9 +4,13 @@ import { useDispatch } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { addTodo } from '@/redux/slices/todoSlice';
+import type { AppDispatch } from '@/redux/store';
+import { validateTodos } from '@/utils/validateTodos';
+import { showErrorToast } from '@/utils/showErrorToast';
+import toast from 'react-hot-toast';
 
 export const InputForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const todoRef = useRef<HTMLInputElement | null>(null);
 
@@ -16,9 +20,29 @@ export const InputForm = () => {
     const input = todoRef.current;
     if (!input) return;
 
-    const todo = input.value.trim();
+    const result = validateTodos(input.value);
 
-    dispatch(addTodo(todo));
+    if (result.isValid === false) {
+      showErrorToast(result.message);
+      return;
+    }
+
+    const now = new Date();
+
+    dispatch(
+      addTodo({
+        id: crypto.randomUUID(),
+        text: result.text,
+        completed: false,
+        createdAtDate: now.toLocaleDateString('en-GB'),
+        createdAtTime: now.toLocaleTimeString('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      })
+    );
+
+    toast.success(`Added "${result.text}"`);
 
     input.focus();
     e.currentTarget.reset();
