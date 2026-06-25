@@ -4,8 +4,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import type { AppDispatch, RootState } from '@/redux/store';
 import { setFilter } from '@/redux/slices/todoSlice';
-
-import { filters, type FilterType } from '../../types/FilterType';
+import { filters, type FilterType } from '@/types/FilterType';
 
 const isFilterType = (value: string): value is FilterType =>
   filters.some((filter) => filter === value);
