@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import todoReducer from '../redux/slices/todoSlice';
+import todoReducer from './slices/todoSlice';
 
 export const store = configureStore({
   reducer: {
@@ -8,12 +8,17 @@ export const store = configureStore({
   },
 });
 
+let previousTodos = store.getState().todos.todoData;
+
 store.subscribe(() => {
+  const currentTodos = store.getState().todos.todoData;
+
+  if (currentTodos === previousTodos) return;
+  previousTodos = currentTodos;
+
   const today = new Date().toLocaleDateString('en-GB');
 
-  const rawTodos = store.getState();
-
-  const prunedTodos = rawTodos.todos.todoData.filter(
+  const prunedTodos = currentTodos.filter(
     (todo) => todo.createdAtDate === today
   );
 
