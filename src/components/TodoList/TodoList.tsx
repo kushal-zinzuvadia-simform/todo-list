@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -35,7 +35,10 @@ export const TodoList = () => {
     text: string;
   } | null>(null);
 
-  const filteredTodos = filterTodos({ todos: todoData, filter: filter });
+  const filteredTodos = useMemo(
+    () => filterTodos({ todos: todoData, filter }),
+    [todoData, filter]
+  );
 
   const handleEditStart = (id: string, currentText: string) => {
     setEditState({ id, text: currentText });
