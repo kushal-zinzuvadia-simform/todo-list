@@ -20,18 +20,18 @@ import { getEmptyMessage } from '@/utils/getEmptyMessage';
 import type { FilterType } from '@/types/FilterType';
 
 export const TodoList = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const filter: FilterType = useSelector(
     (state: RootState) => state.todos.filterCategory
   );
   const todoData = useSelector((state: RootState) => state.todos.todoData);
 
-  const filteredTodos = filterTodos({ todos: todoData, filter: filter });
-
   const [editState, setEditState] = useState<{
     id: string;
     text: string;
   } | null>(null);
+
+  const filteredTodos = filterTodos({ todos: todoData, filter: filter });
 
   const handleEditStart = (id: string, currentText: string) => {
     setEditState({ id, text: currentText });
@@ -107,7 +107,7 @@ export const TodoList = () => {
                           }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') handleEditSave();
-                            if (e.key === 'Escape') handleEditCancel();
+                            if (e.key === 'Escape') setEditState(null); // handle edit cancel
                           }}
                           className="h-7 max-w-sm"
                           aria-label="Edit todo"
@@ -139,7 +139,7 @@ export const TodoList = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={handleEditCancel}
+                              onClick={() => setEditState(null)} // handle edit cancel
                               aria-label="Cancel edit"
                               title="Cancel"
                             >

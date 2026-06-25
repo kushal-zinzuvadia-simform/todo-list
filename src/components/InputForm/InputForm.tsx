@@ -1,8 +1,8 @@
 import { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useDispatch } from 'react-redux';
 import { addTodo } from '@/redux/slices/todoSlice';
 
 export const InputForm = () => {
