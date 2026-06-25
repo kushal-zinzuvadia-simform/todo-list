@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +8,6 @@ import { addTodo } from '@/redux/slices/todoSlice';
 import type { AppDispatch } from '@/redux/store';
 import { validateTodos } from '@/utils/validateTodos';
 import { showErrorToast } from '@/utils/showErrorToast';
-import toast from 'react-hot-toast';
 
 export const InputForm = () => {
   const dispatch = useDispatch<AppDispatch>();
