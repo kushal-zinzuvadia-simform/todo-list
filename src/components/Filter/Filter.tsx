@@ -1,18 +1,21 @@
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useTodoContext } from '@/hooks/useTodoContext';
-
-import { filters, type FilterType } from '../../types/FilterType';
+import type { AppDispatch, RootState } from '@/redux/store';
+import { setFilter } from '@/redux/slices/todoSlice';
+import { filters, type FilterType } from '@/types/FilterType';
 
 const isFilterType = (value: string): value is FilterType =>
   filters.some((filter) => filter === value);
 
 export const Filter = () => {
-  const { setFilter, filter } = useTodoContext();
+  const filter = useSelector((state: RootState) => state.todos.filterCategory);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (value: string) => {
     if (isFilterType(value)) {
-      setFilter(value);
+      dispatch(setFilter(value));
     }
   };
 

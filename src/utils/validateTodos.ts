@@ -1,13 +1,24 @@
 import type { AddResult } from '@/types/AddResult';
 
 type ValidationResult =
-  | { isValid: false; message: AddResult }
-  | { isValid: true; text: string };
+  | {
+      isValid: true;
+      text: string;
+    }
+  | {
+      isValid: false;
+      message: AddResult;
+    };
 
 export const validateTodos = (text: string): ValidationResult => {
   const trimmedText = text.trim();
 
-  if (!trimmedText) return { isValid: false, message: 'empty' };
+  if (!trimmedText) {
+    return {
+      isValid: false,
+      message: 'empty',
+    };
+  }
 
   const alphanumericCount = (trimmedText.match(/[a-zA-Z0-9]/g) ?? []).length;
 
@@ -15,12 +26,21 @@ export const validateTodos = (text: string): ValidationResult => {
     .length;
 
   if (specialCharacterCount > 5) {
-    return { isValid: false, message: 'too-many-special-characters' };
+    return {
+      isValid: false,
+      message: 'too-many-special-characters',
+    };
   }
 
   if (alphanumericCount < 3) {
-    return { isValid: false, message: 'too-short' };
+    return {
+      isValid: false,
+      message: 'too-short',
+    };
   }
 
-  return { isValid: true, text: trimmedText };
+  return {
+    isValid: true,
+    text: trimmedText,
+  };
 };

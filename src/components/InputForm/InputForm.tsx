@@ -1,14 +1,17 @@
 import { useRef } from 'react';
-
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useTodoContext } from '@/hooks/useTodoContext';
+import { addTodo } from '@/redux/slices/todoSlice';
+import type { AppDispatch } from '@/redux/store';
+import { createTodo } from '@/utils/createTodo';
 import { showErrorToast } from '@/utils/showErrorToast';
+import { validateTodos } from '@/utils/validateTodos';
 
 export const InputForm = () => {
-  const { addItem } = useTodoContext();
+  const dispatch = useDispatch<AppDispatch>();
 
   const todoRef = useRef<HTMLInputElement | null>(null);
 
@@ -16,17 +19,21 @@ export const InputForm = () => {
     e.preventDefault();
 
     const input = todoRef.current;
-
     if (!input) return;
 
-    const todo = input.value.trim();
-    const result = addItem(todo);
+    const result = validateTodos(input.value);
+
+    if (result.isValid === false) {
+      showErrorToast(result.message);
+      return;
+    }
+
+    dispatch(addTodo(createTodo(result.text)));
+
+    toast.success(`Added "${result.text}"`);
 
     input.focus();
-    showErrorToast(result);
-
     e.currentTarget.reset();
-    toast.success(`Added "${todo}"`, { duration: 3000 });
   };
 
   return (
